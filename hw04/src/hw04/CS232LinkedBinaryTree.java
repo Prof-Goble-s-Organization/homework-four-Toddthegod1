@@ -132,7 +132,20 @@ public class CS232LinkedBinaryTree<K, V> implements CS232BinaryTree<K, V> {
 	public CS232LinkedBinaryTree(CS232LinkedBinaryTree<K, V> leftSubTree,
 			K key, V value, CS232LinkedBinaryTree<K, V> rightSubTree) {
 		// Intentionally not implemented - see homework assignment.
-		throw new UnsupportedOperationException("Not yet implemented");
+		root = new BTNode<>(key,value);
+		size = 1;
+
+		if (leftSubTree != null && leftSubTree.root != null) {
+			root.left = leftSubTree.root;
+			leftSubTree.root.parent = root;
+			size += leftSubTree.size;
+		}
+
+		if (rightSubTree != null && rightSubTree.root != null) {
+			root.right = rightSubTree.root;
+			rightSubTree.root.parent = root;
+			size += rightSubTree.size;
+		}
 	}
 
 	/**
@@ -297,7 +310,15 @@ public class CS232LinkedBinaryTree<K, V> implements CS232BinaryTree<K, V> {
 	 */
 	public void visitInOrder(CS232Visitor<K, V> visitor) {
 		// Intentionally not implemented - see homework assignment.
-		throw new UnsupportedOperationException("Not yet implemented");
+		subTreeVisitInOrder(root, visitor);
+	}
+
+	private void subTreeVisitInOrder(BTNode<K, V> subTreeRoot, CS232Visitor<K, V> visitor) {
+		if (subTreeRoot != null) {
+			subTreeVisitInOrder(subTreeRoot.left, visitor);
+			visitor.visit(subTreeRoot.key, subTreeRoot.value);
+			subTreeVisitInOrder(subTreeRoot.right, visitor);
+		}
 	}
 
 	/**
